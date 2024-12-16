@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const fetch = require('node-fetch');
 const https = require('https');
+// 添加dotenv配置
+require('dotenv').config();
 
 const app = express();
 const port = 3000;
@@ -16,6 +18,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+// 创建通用的headers配置
+const getHeaders = () => ({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${process.env.API_TOKEN}`
+});
+
 // 登录API
 app.post('/api/login', async (req, res) => {
     try {
@@ -24,7 +32,7 @@ app.post('/api/login', async (req, res) => {
         const response = await fetch('https://your-api-endpoint/login', {
             method: 'POST',
             agent,
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify({ email, password })
         });
 
@@ -43,7 +51,7 @@ app.post('/api/register', async (req, res) => {
         const response = await fetch('https://your-api-endpoint/register', {
             method: 'POST',
             agent,
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify({ username, email, password })
         });
 
@@ -62,7 +70,7 @@ app.post('/api/send-verification', async (req, res) => {
         const response = await fetch('https://your-api-endpoint/send-verification', {
             method: 'POST',
             agent,
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify({ email })
         });
 
@@ -81,7 +89,7 @@ app.post('/api/verify-code', async (req, res) => {
         const response = await fetch('https://your-api-endpoint/verify-code', {
             method: 'POST',
             agent,
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify({ email, code })
         });
 
@@ -100,7 +108,7 @@ app.post('/api/reset-password', async (req, res) => {
         const response = await fetch('https://your-api-endpoint/reset-password', {
             method: 'POST',
             agent,
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify({ email, newPassword })
         });
 
